@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
+using SchoolMaterials.Models;
 using Microsoft.EntityFrameworkCore;
 using SchoolMaterials.Data;
 
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Настройки за потребители и пароли
 builder.Services
-    .AddIdentity<IdentityUser, IdentityRole>(options =>
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.Password.RequiredLength = 8;
         options.Password.RequireDigit = true;
@@ -58,4 +59,21 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Create application roles
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+    string[] roles = { "Teacher", "Admin" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(
+                new IdentityRole(role));
+        }
+    }
+}
 app.Run();
