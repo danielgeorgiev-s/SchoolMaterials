@@ -1,21 +1,21 @@
 
 using Microsoft.AspNetCore.Identity;
-using SchoolMaterials.Models;
 using Microsoft.EntityFrameworkCore;
 using SchoolMaterials.Data;
+using SchoolMaterials.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Регистрация на MVC
+// MVC configuration
 builder.Services.AddControllersWithViews();
 
-// Връзка с SQLite
+// SQLite database configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString(
             "DefaultConnection")));
 
-// Настройки за потребители и пароли
+// Identity configuration
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
@@ -30,7 +30,7 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Настройки за вход
+// Cookie configuration
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -39,7 +39,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// HTTP конфигурация
+// HTTP configuration
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -54,7 +54,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Начална страница
+// Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -71,9 +71,16 @@ using (var scope = app.Services.CreateScope())
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(
+            var result = await roleManager.CreateAsync(
                 new IdentityRole(role));
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(
+                    "Could not create role: " + role);
+            }
         }
     }
 }
+
 app.Run();
