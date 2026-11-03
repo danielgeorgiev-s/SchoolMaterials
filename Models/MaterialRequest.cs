@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace SchoolMaterials.Models;
-
+// Represents a material request submitted by a school teacher.
 public class MaterialRequest
 {
     public int Id { get; set; }
