@@ -1,5 +1,4 @@
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolMaterials.Models;
@@ -7,7 +6,7 @@ using SchoolMaterials.Models;
 namespace SchoolMaterials.Data;
 
 public class ApplicationDbContext
-    : IdentityDbContext<IdentityUser>
+    : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options)

@@ -2,21 +2,22 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolMaterials.Data;
+using SchoolMaterials.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Регистрация на MVC
+// MVC configuration
 builder.Services.AddControllersWithViews();
 
-// Връзка с SQLite
+// SQLite database configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString(
             "DefaultConnection")));
 
-// Настройки за потребители и пароли
+// Identity configuration
 builder.Services
-    .AddIdentity<IdentityUser, IdentityRole>(options =>
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.Password.RequiredLength = 8;
         options.Password.RequireDigit = true;
@@ -29,7 +30,7 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Настройки за вход
+// Cookie configuration
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -38,7 +39,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// HTTP конфигурация
+// HTTP configuration
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -53,9 +54,33 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Начална страница
+// Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Create application roles
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+    string[] roles = { "Teacher", "Admin" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            var result = await roleManager.CreateAsync(
+                new IdentityRole(role));
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(
+                    "Could not create role: " + role);
+            }
+        }
+    }
+}
 
 app.Run();

@@ -1,9 +1,9 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace SchoolMaterials.Models;
+
 // Represents a material request submitted by a school teacher.
 public class MaterialRequest
 {
@@ -33,7 +33,7 @@ public class MaterialRequest
     public string UserId { get; set; } = string.Empty;
 
     [ForeignKey(nameof(UserId))]
-    public IdentityUser? User { get; set; }
+    public ApplicationUser? User { get; set; }
 }
 
 public enum RequestStatus
