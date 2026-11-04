@@ -220,31 +220,23 @@ namespace SchoolMaterials.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AdminComment")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(300)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("RequestNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -309,9 +301,7 @@ namespace SchoolMaterials.Migrations
                 {
                     b.HasOne("SchoolMaterials.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

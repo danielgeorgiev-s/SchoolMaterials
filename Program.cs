@@ -59,28 +59,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Create application roles
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider
-        .GetRequiredService<RoleManager<IdentityRole>>();
-
-    string[] roles = { "Teacher", "Admin" };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            var result = await roleManager.CreateAsync(
-                new IdentityRole(role));
-
-            if (!result.Succeeded)
-            {
-                throw new Exception(
-                    "Could not create role: " + role);
-            }
-        }
-    }
+    await SchoolMaterials.Data.DbSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
 }
 
 app.Run();
