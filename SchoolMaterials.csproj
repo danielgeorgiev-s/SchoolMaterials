@@ -22,4 +22,11 @@
   <None Remove="DatabaseCheck/**" />
 </ItemGroup>
 
+
+<ItemGroup>
+    <Compile Remove="SchoolMaterials.Tests\**" />
+    <Content Remove="SchoolMaterials.Tests\**" />
+    <EmbeddedResource Remove="SchoolMaterials.Tests\**" />
+    <None Remove="SchoolMaterials.Tests\**" />
+  </ItemGroup>
 </Project>
