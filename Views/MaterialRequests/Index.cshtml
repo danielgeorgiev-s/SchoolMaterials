@@ -15,6 +15,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Учител</th>
             <th>Номер</th>
             <th>Дата</th>
             <th>Описание</th>
@@ -30,6 +31,7 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.User.Email.Split('@')[0]</td>
                 <td>@item.RequestNumber</td>
                 <td>@item.Date.ToShortDateString()</td>
                 <td>@item.Description</td>
