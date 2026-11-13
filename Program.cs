@@ -1,8 +1,9 @@
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolMaterials.Data;
 using SchoolMaterials.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using SchoolMaterials.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,9 +27,15 @@ builder.Services
         options.Password.RequireNonAlphanumeric = true;
 
         options.User.RequireUniqueEmail = true;
+        
+        // НОВО: Изискваме потвърждение на имейла преди вход
+        options.SignIn.RequireConfirmedAccount = true;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+// НОВО: Регистрираме нашия симулатор на имейли
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 // Cookie configuration
 builder.Services.ConfigureApplicationCookie(options =>

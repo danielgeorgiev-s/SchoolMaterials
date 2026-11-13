@@ -6,8 +6,13 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <span class="nav-link text-dark">Здравей, @User.Identity?.Name!</span>
+    // Взимаме имейла, махаме всичко след @ и правим първата буква главна
+    var email = User.Identity?.Name ?? "";
+    var name = email.Contains("@") ? email.Split('@')[0] : email;
+    var displayName = name.Length > 0 ? char.ToUpper(name[0]) + name.Substring(1) : name;
+
+    <li class="nav-item d-flex align-items-center">
+        <span class="nav-link text-dark fw-bold">Здравей, @displayName!</span>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" method="post">

@@ -1,8 +1,38 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Начална страница";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4 fw-bold" style="color: #003366;">Система за Училищни Материали</h1>
+    <p class="lead mt-3 text-muted">Лесен и удобен начин за заявяване и управление на консумативи.</p>
+    
+    <hr class="my-4" style="max-width: 50%; margin: auto;">
+
+    <div class="mt-4">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="MaterialRequests" asp-action="Index" class="btn btn-primary btn-lg m-2 px-5">Виж заявките</a>
+        }
+        else
+        {
+            <p class="mb-3">За да създадете или управлявате заявки, моля влезте в системата.</p>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg m-2 px-4">Вход</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary btn-lg m-2 px-4">Регистрация</a>
+        }
+    </div>
+</div>
+
+<div class="row mt-5 text-center px-4">
+    <div class="col-md-4 mb-4">
+        <h4 style="color: #00509e;">📝 Бързо заявяване</h4>
+        <p class="text-muted">Учителите могат лесно да пускат заявки за нужните материали само с няколко клика.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+        <h4 style="color: #00509e;">🔍 Проследяване</h4>
+        <p class="text-muted">Следете в реално време статуса на вашата заявка – дали изчаква, или е одобрена.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+        <h4 style="color: #00509e;">⚙️ Централен контрол</h4>
+        <p class="text-muted">Администраторът преглежда и управлява всички заявки от едно удобно място.</p>
+    </div>
 </div>
